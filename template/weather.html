@@ -1,0 +1,75 @@
+{% extends 'index.html' %}
+{% block content %}
+{% load static %}
+<style>
+    .shadow{
+        box-shadow:2px 2px 3px 2px rgb(158, 158, 158);
+        padding: 10px;
+    }
+</style>
+
+<div class="container" style="margin-top: 60px;margin-bottom:100px;" >
+<div class=" col-4 offset-4 ">
+    <div class="card-header text-white bg-info mb-3">
+        <h4 class="text-center" style="font-family:cursive;" ><img class="p" src="{% static 'images/cloudy.png' %}"> Weather Map</h4>
+    </div>
+    {% if messages %}
+        
+        {% for message in messages %}
+                {% if message.tags == 'error' %}
+                        <div class="alert alert-danger">
+                            {{message}}
+                        </div>
+                {% else %} 
+
+                        <div class="alert alert-{{message.tags}}">
+                             {{message}}
+
+                        </div>
+                {% endif %}
+        {% endfor %}
+    {% endif %}
+    
+    <form method="post">
+        {% csrf_token%}
+        <div class="input-group ">
+            {{form.name}}
+            <span class="input-group-btn">           
+            <button class="btn btn-info" type="submit">Add city</button></span>                     
+        </div>
+    </form>
+    {% for city_weather in data %}
+        <div class="shadow media">
+            <div class="media-left">
+              <a href="#">
+                <img src="http://openweathermap.org/img/w/{{city_weather.icon}}.png" class="media-object">
+              </a>
+            </div>
+            <div class="media-body">
+                <h5>{{city_weather.city}}</h5>
+                <h5>{{city_weather.temperature}} C</h5>
+                <h5>{{city_weather.description}}</h5>
+                <h5>{{city_weather.country}}</h5>
+                
+            </div>
+            <div class="media-right">
+                <a href="{% url 'deletedt' city_weather.city %}">❌</a>
+            </div>
+        </div>
+
+
+    {% endfor %}
+    
+
+
+</div></div>
+
+     
+<script>
+    $(document).ready(function(){
+  $(".alert").hide(4000);
+});
+</script>
+    {% endblock %}
+
+    
